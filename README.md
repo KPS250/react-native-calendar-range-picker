@@ -65,6 +65,7 @@ Common props you may want to specify include:
 | `flatListProps`       | `FlatList Props`     | FlatList all props.                                                                                     |
 | `isMonthFirst`        | `boolean`            | Switch year and month order. (2021 April -> April 2021)                                                 |
 | `disabledBeforeToday` | `boolean`            | Disable select day before today.                                                                        |
+| `disabledAfterToday` | `boolean`            | Disable select day after today.                                                                        |
 | `style`               | `object`             | Customize style.                                                                                        |
 
 ### Locale

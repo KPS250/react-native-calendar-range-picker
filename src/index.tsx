@@ -1,9 +1,10 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import moment from "moment";
 // components
 import CalendarList from "./CalendarList";
 // data
 import { LOCALE, LOCALE_TYPE } from "./utils/locale";
+import {DeviceEventEmitter} from 'react-native';
 
 export interface Style {
   container?: {};
@@ -39,6 +40,8 @@ interface Props {
   flatListProps?: any;
   isMonthFirst?: boolean;
   disabledBeforeToday?: boolean;
+  disabledAfterToday?: boolean;
+  refresh: number;
 }
 
 export default function Index({
@@ -54,6 +57,8 @@ export default function Index({
   flatListProps,
   isMonthFirst,
   disabledBeforeToday,
+  disabledAfterToday,
+  refresh
 }: Props) {
   const [startDate, setStartDate] = useState(
     prevStartDate ? prevStartDate : null
@@ -61,6 +66,19 @@ export default function Index({
   const [endDate, setEndDate] = useState(prevEndDate ? prevEndDate : null);
   const startDateRef: any = useRef(null);
   const endDateRef: any = useRef(null);
+
+  DeviceEventEmitter.addListener('event.resetDates', eventData => {
+    setStartDate(null);
+    setEndDate(null);
+    startDateRef.current = null;
+    endDateRef.current = null;
+  });
+
+  useEffect(() => {
+    return () => {
+      DeviceEventEmitter.removeAllListeners('event.resetDates');
+    };
+  }, []);
 
   const handleSetStartDate = (startDate: string) => {
     setStartDate(startDate);
@@ -118,6 +136,7 @@ export default function Index({
       flatListProps={flatListProps}
       isMonthFirst={isMonthFirst}
       disabledBeforeToday={disabledBeforeToday}
+      disabledAfterToday={disabledAfterToday}
     />
   );
 }
